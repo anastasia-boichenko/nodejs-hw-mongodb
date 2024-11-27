@@ -1,3 +1,8 @@
-const message = "Hello world";
+import { setupServer } from './server.js';
+import dotenv from 'dotenv';
 
-console.log(message);
+// Завантаження змінних середовища
+dotenv.config();
+
+// Запуск сервера
+setupServer();
