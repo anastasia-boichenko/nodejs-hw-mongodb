@@ -1,9 +1,22 @@
 import createHttpError from 'http-errors';
 
 import * as contactServices from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseContactFilterParams } from '../utils/parseContactFilterParams.js';
 
 export const getContactsController = async (req, res) => {
-  const data = await contactServices.getContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filter = parseContactFilterParams(req.query);
+
+  const data = await contactServices.getContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
 
   res.json({
     status: 200,
@@ -39,7 +52,7 @@ export const addContactController = async (req, res) => {
 
 export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
-  const { data } = await contactServices.updateContact(contactId, req.body);
+  const data = await contactServices.updateContact(contactId, req.body);
 
   if (!data) {
     throw createHttpError(404, `Contact with id ${contactId} not found`);
