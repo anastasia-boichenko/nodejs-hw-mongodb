@@ -1,8 +1,9 @@
+import { initMongoConection } from './db/initMongoConnection.js';
 import { setupServer } from './server.js';
-import dotenv from 'dotenv';
 
-// Завантаження змінних середовища
-dotenv.config();
+const boostrap = async () => {
+  await initMongoConection();
+  setupServer();
+};
 
-// Запуск сервера
-setupServer();
+boostrap();
