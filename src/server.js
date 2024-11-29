@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
-import contactRouter from './routes/contacts.js';
-
+import router from './routes/index.js';
 import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -16,6 +16,7 @@ export function setupServer() {
   app.use(cors());
   app.use(logger);
   app.use(express.json());
+  app.use(cookieParser());
 
   app.get('/', (req, res) => {
     res.json({
@@ -23,7 +24,7 @@ export function setupServer() {
     });
   });
 
-  app.use('/contacts', contactRouter);
+  app.use(router);
 
   app.use(notFoundHandler);
 
